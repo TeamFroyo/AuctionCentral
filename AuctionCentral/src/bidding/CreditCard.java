@@ -252,7 +252,7 @@ public final class CreditCard {
 		sb.append(myCardNum);
 		sb.append("\n");
 		sb.append("Expiration Date: ");
-		sb.append(myExpDate);
+		sb.append(myExpDate.getDay() + " ");
 		sb.append("\n");
 		sb.append("CSC: ");
 		sb.append(myCSC);
