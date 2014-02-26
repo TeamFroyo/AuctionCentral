@@ -1,6 +1,7 @@
 
 /*
- * Setting up GitHub repo..
+ * Testing branches/merging
+ * 
  */
 
 public class Main {
