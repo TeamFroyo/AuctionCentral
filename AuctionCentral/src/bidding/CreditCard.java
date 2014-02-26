@@ -1,5 +1,7 @@
 package bidding;
 
+import java.util.Date;
+
 /**
  * Class: CreditCard
  * 
@@ -23,7 +25,7 @@ public final class CreditCard {
 	/**
 	 * Card expiration date.
 	 */
-	private int myExpDate;
+	private Date myExpDate;
 	
 	/**
 	 * The 3 digit card security code.
@@ -43,14 +45,14 @@ public final class CreditCard {
 	/**
 	 * The bank this card belongs to.
 	 */
-	private String myBank;	
+	private Bank myBank;	
 		
 	/**
 	 * Create a new CreditCard object.
 	 * <p>
 	 * <dt><b> Precondition: Valid parameters are passed to 
 	 * constructor. </b><dd>
-	 * <dt><b> Postcondition: The CreditCard has been initialized 
+	 * <dt><b> Postcondition: The CreditCard is initialized 
 	 * properly. </b><dd>
 	 * 
 	 * @param aCardNum The card number.
@@ -61,20 +63,22 @@ public final class CreditCard {
 	 * @param aBank The bank the card belongs to.
 	 * 
 	 * @return The CreditCard object.
+	 * @throws IllegalArgumentException Throws exception in the case of
+	 * invalid parameters.
 	 */
-	public CreditCard(long aCardNum, int anExpDate, int aCSC,
-			String aCardHolder, Address anAddress, String aBank){
-		myCardNum = aCardNum;
-		myExpDate = anExpDate;
-		myCSC = aCSC;
-		myCardHolder = aCardHolder;
-		myAddress = anAddress;
-		myBank = aBank;
+	public CreditCard(long aCardNum, Date anExpDate, int aCSC,
+			String aCardHolder, Address anAddress, Bank aBank){
+		
+		// Validation is handled by individual setters
+		setCardNum(aCardNum);
+		setExpDate(anExpDate);
+		setCSC(aCSC);
+		setCardHolder(aCardHolder);
+		setAddress(anAddress);
+		setBank(aBank);
 	}
 	
 	/**
-	 * Get the card number.
-	 * 
 	 * @return The card number.
 	 */
 	private final long getCardNum() {
@@ -82,17 +86,15 @@ public final class CreditCard {
 	}
 
 	/**
-	 * Get the card expiration date.
-	 * 
 	 * @return The expiration date.
 	 */
-	private final int getExpDate() {
+	private final Date getExpDate() {
+		
+		// TODO : return a defensive copy here
 		return myExpDate;
 	}
 
 	/**
-	 * Get the CSC code.
-	 * 
 	 * @return The CSC code.
 	 */
 	private final int getCSC() {
@@ -100,8 +102,6 @@ public final class CreditCard {
 	}
 
 	/**
-	 * Get the card holder name.
-	 * 
 	 * @return The card holder name.
 	 */
 	private final String getCardHolder() {
@@ -109,8 +109,6 @@ public final class CreditCard {
 	}
 
 	/**
-	 * Get the card holder address.
-	 * 
 	 * @return The address.
 	 */
 	private final Address getAddress() {
@@ -120,14 +118,76 @@ public final class CreditCard {
 	}
 
 	/**
-	 * Get the bank.
-	 * 
 	 * @return The bank.
 	 */
-	private final String getBank() {
+	private final Bank getBank() {
 		return myBank;
 	}
 	
+	/**
+	 * @param aCardNum The card number to set.
+	 */
+	private final void setCardNum(long aCardNum) {
+		if((new Long(aCardNum)).toString().length() != 16) {
+			throw new IllegalArgumentException("Invalid card number length");
+		} else {
+			this.myCardNum = aCardNum;
+		}
+	}
+
+	/**
+	 * @param anExpDate The expiration date to set.
+	 */
+	private final void setExpDate(Date anExpDate) {
+		
+		//TODO : make defensive copy
+		this.myExpDate = anExpDate;
+	}
+
+	/**
+	 * @param aCSC The CSC to set.
+	 */
+	private final void setCSC(int aCSC) {
+		if((new Integer(aCSC)).toString().length() != 3) {
+			throw new IllegalArgumentException("Invalid CSC length");
+		} else {
+			this.myCSC = aCSC;
+		}
+	}
+
+	/**
+	 * <p>
+	 * <dt><b> Precondition: Card holder name is not blank. </b><dd>
+	 * <dt><b> Postcondition: Name is set. </b><dd>
+	 * 
+	 * @param aCardHolder The card holder name to set.
+	 */
+	private final void setCardHolder(String aCardHolder) {
+		if (aCardHolder.length() == 0) {
+			throw new IllegalArgumentException("Name cannot be blank");
+		} else {
+			this.myCardHolder = aCardHolder;
+		}
+	}
+
+	/**
+	 * @param anAddress The address to set.
+	 */
+	private final void setAddress(Address anAddress) {
+		
+		//TODO : make defensive copy
+		this.myAddress = anAddress;
+	}
+
+	/**
+	 * @param aBank The bank name to set.
+	 */
+	private final void setBank(Bank aBank) {
+
+		//TODO : make defensive copy
+		this.myBank = aBank;
+	}
+
 	/**
 	 * Check to see if this CreditCard matches another CreditCard.
 	 * <p>
@@ -143,25 +203,28 @@ public final class CreditCard {
 	public boolean equals(Object anObject) {
 		boolean isEqual = true;
 		
-		// Check for correct object type, and set flag to false if incorrect
-		if (!(anObject instanceof CreditCard)) {
+		// Check for null object
+		if (anObject == null) {
+			isEqual = false;
+			
+		// Check for correct object type
+		} else if (!(anObject instanceof CreditCard)) {
 			isEqual = false;
 		} else {
 			
-			// If object is a CreditCard, cast it to a CreditCard
+			// Cast other object to a CreditCard
 			CreditCard other = (CreditCard)anObject;
 		
-			// Compare field by field for equality and set flag to false if
-			// a field doesn't match
+			// Compare field by field for equality
 			if (!myCardHolder.equals(other.getCardHolder())) {
 				isEqual = false;
 			} else if (myCardNum != other.getCardNum()) {
 				isEqual = false;
-			} else if (myExpDate != other.getExpDate()) {
+			} else if (!myExpDate.equals(other.getExpDate())) {
 				isEqual = false;
 			} else if (myCSC != other.getCSC()) {
 				isEqual = false;
-			} else if (!myAddress.equals(other.getAddress())) {
+			} else if (!myAddress.equals(other.getAddress().toString())) {
 				isEqual = false;
 			} else if (!myBank.equals(other.getBank())) {
 				isEqual = false;
@@ -201,8 +264,10 @@ public final class CreditCard {
 		
 		sb.append("\n");
 		sb.append("Bank: ");
-		sb.append(myBank);
+		//TODO : once Address toString() is implemented, use that here!
+		sb.append("PLACEHOLDER BANK");
 		sb.append("\n");
+		
 		return sb.toString();
 	}
 }
