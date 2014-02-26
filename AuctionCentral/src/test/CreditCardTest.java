@@ -10,7 +10,7 @@ import org.junit.Test;
 /**
  * Class: CreditCardTest
  * 
- * Contains test for class: CreditCard
+ * Contains tests for class: CreditCard
  * 
  * TCSS 360 - Software Development and Quality Assurance
  * University of Washington, Tacoma
